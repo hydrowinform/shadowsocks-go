@@ -141,14 +141,14 @@ func handleConnection(conn *ss.Conn, auth bool, port string) {
 
 	host, ota, err := getRequest(conn, auth)
 	if err != nil {
-		time.Sleep(3660 * time.Second)
+		time.Sleep(60 * time.Second)
 		log.Println("error getting request", conn.RemoteAddr(), conn.LocalAddr(), err)
 		closed = true
 		return
 	}
 	// ensure the host does not contain some illegal characters, NUL may panic on Win32
 	if strings.ContainsRune(host, 0x00) {
-		time.Sleep(3660 * time.Second)
+		time.Sleep(60 * time.Second)
 		log.Println("invalid domain name.")
 		closed = true
 		return
@@ -156,7 +156,7 @@ func handleConnection(conn *ss.Conn, auth bool, port string) {
 	debug.Println("connecting", host)
 	remote, err := net.Dial("tcp", host)
 	if err != nil {
-		time.Sleep(3660 * time.Second)
+		time.Sleep(60 * time.Second)
 		if ne, ok := err.(*net.OpError); ok && (ne.Err == syscall.EMFILE || ne.Err == syscall.ENFILE) {
 			// log too many open file error
 			// EMFILE is process reaches open file limits, ENFILE is system limit
